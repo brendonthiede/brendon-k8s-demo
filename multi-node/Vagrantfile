@@ -1,0 +1,29 @@
+IMAGE_NAME = "ubuntu/xenial64"
+N = 2
+
+Vagrant.configure("2") do |config|
+    config.ssh.insert_key = false
+    config.vm.boot_timeout = 1800
+    config.vm.synced_folder '.', '/vagrant'
+
+    config.vm.provider "virtualbox" do |v|
+        v.memory = 1024
+        v.cpus = 2
+    end
+      
+    config.vm.define "k8s-controller" do |controller|
+        controller.vm.box = IMAGE_NAME
+        controller.vm.network "private_network", ip: "10.0.0.10"
+        controller.vm.hostname = "k8s-controller"
+        controller.vm.provision "shell", privileged: true, path: "bash/prepare-controller.sh"
+    end
+
+    (1..N).each do |i|
+        config.vm.define "node-#{i}" do |node|
+            node.vm.box = IMAGE_NAME
+            node.vm.network "private_network", ip: "10.0.0.#{i + 10}"
+            node.vm.hostname = "node-#{i}"
+            node.vm.provision "shell", privileged: true, path: "bash/prepare-node.sh"
+        end
+    end
+end

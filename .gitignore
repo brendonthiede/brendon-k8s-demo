@@ -102,3 +102,9 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Vagrant cache files
+.vagrant
+
+# kubeadm join command
+join-command.sh
