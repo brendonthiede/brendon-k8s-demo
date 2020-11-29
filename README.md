@@ -1,8 +1,8 @@
-# minikube Demo
+# Brendon k8s Demo
 
 ## Purpose
 
-This repo exists for showing some example usage of [Kubernetes](https://kubernetes.io/) on Windows via [minikube](https://minikube.sigs.k8s.io/docs/).
+This repo exists for showing some example usage of [Kubernetes](https://kubernetes.io/) on Windows.
 
 ## Context
 
@@ -19,32 +19,25 @@ The reference system for this is using Windows 10 Pro version 1909, build 18363.
 
 ## Virtual machine multi-node cluster
 
-In order to use this solution, you will need to use WSL in order to run Ansible
+While minikube is great for basic Kubernetes functionality, if you want to be able to see how HA, anti-affinity/affinity, etc. work in a more realistic scenario, you need to have more than one worker.
 
-1. Install [Virtual Box 6.1](https://www.virtualbox.org/wiki/Downloads) or newer (Hyper-V compatability)
-2. Install [Vagrant](https://www.vagrantup.com/downloads), checking in [older versions](https://releases.hashicorp.com/vagrant/) for something with both deb and msi formats (must be version 2.2.14 or newer to work with WSL2).
-    1. Install Vagrant in WSL:
-    ```bash
-    wget -O vagrant.deb https://releases.hashicorp.com/vagrant/2.2.14/vagrant_2.2.14_x86_64.deb
-    sudo dpkg -i vagrant.deb
-    rm -f vagrant.deb
-    vagrant --version
-    ```
-    2. Install the same version for Windows, e.g. [2.2.14](https://releases.hashicorp.com/vagrant/2.2.14/vagrant_2.2.14_x86_64.msi)
-3. Install [Ansible](https://www.digestibledevops.com/devops/2018/12/11/ansible-on-windows.html):
-```bash
-sudo apt-get update
-sudo apt-get install software-properties-common --yes
-sudo apt-add-repository --yes --update ppa:ansible/ansible
-sudo apt-get install ansible --yes
-```
-4. Run the following from a WSL Bash prompt to create and intialize the cluster (you will likely need to approve several prompts to give VirtualBox the rights it needs to getting things rolling, at least the first time):
-```bash
-export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
-export PATH="$PATH:/mnt/c/Program Files/Oracle/VirtualBox"
-cd ./multi-node/
-vagrant up
-```
+### Kubernetes "The Hard Way"
+
+This solutions relies on [Virtual Box](https://www.virtualbox.org/) and [Vagrant](https://www.vagrantup.com/), using the shell provisioner of Vagrant to set up a Kubernetes cluster with a single control plane node and two worker nodes, with the scripting for getting Kubernetes up and running pulling heavily from Kelsey Hightower's [Kubernetes The Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way). One big difference from Kubernetes The Hard Way is the networking, in particular the usage of HA Proxy on the control plane node for exposing the worker nodes.
+
+To get a local cluster up and running
+
+1. Install [Virtual Box 6.1](https://www.virtualbox.org/wiki/Downloads) or newer (Hyper-V compatibility).
+2. Install [Vagrant](https://www.vagrantup.com/downloads).
+3. From PowerShell, inside the `multi-node\hardway` directory, run `vagrant up`
+
+After a few minutes, you should return to the prompt and the cluster will be ready.
+
+If you ever decide to remove the cluster you can run `vagrant destroy --force` to delete the VMs. After that, if you even want to remove the downloaded boxes, etc., you also need to delete the .vagrant folder.
+
+### Alternative solution based on kubeadm with Ansible
+
+Notes on an alternative approach that did not succeed can be found here: [Ansible Notes](./ansible-notes.md)
 
 ## Setting up tools
 
@@ -53,3 +46,5 @@ If using Bash as your primary shell, you can have kubectl provide command comple
 ```bash
 source <(kubectl completion bash)
 ```
+
+For the mult-node cluster, you can instead opt to use the control plane node, which already has the tooling set up, by running `vagrant ssh k8s-controller` from inside the directory with the Vagrantfile.
