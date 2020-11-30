@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This repo exists for showing some example usage of [Kubernetes](https://kubernetes.io/) on Windows.
+This repo exists for showing some example installation and usage of [Kubernetes](https://kubernetes.io/), focusing on Windows, though it should work wherever you can install Virtual Box and Vagrant.
 
 ## Context
 
