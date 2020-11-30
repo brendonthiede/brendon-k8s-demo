@@ -6,7 +6,7 @@ This repo exists for showing some example usage of [Kubernetes](https://kubernet
 
 ## Context
 
-The reference system for this is using Windows 10 Pro version 1909, build 18363.1139. It has [WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10), using the [Ubuntu 20.04](https://www.microsoft.com/store/productId/9N6SVWS3RX71) distro. The system also has [Docker Desktop 2.5](https://hub.docker.com/editions/community/docker-ce-desktop-windows) (which leverages Hyper-V) and [Virtual Box 6.1](https://www.virtualbox.org/wiki/Downloads) (which can work with Hyper-V)
+The reference system for this is using Windows 10 Pro version 1909, build 18363.1139. It has [WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10), using the [Ubuntu 20.04](https://www.microsoft.com/store/productId/9N6SVWS3RX71) distro (WSL2 is not needed for "The Hard Way" below). The system also has [Docker Desktop 2.5](https://hub.docker.com/editions/community/docker-ce-desktop-windows) (which leverages Hyper-V) and [Virtual Box 6.1](https://www.virtualbox.org/wiki/Downloads) (which can work with Hyper-V)
 
 ## Setting up Kubernetes
 
@@ -47,4 +47,4 @@ If using Bash as your primary shell, you can have kubectl provide command comple
 source <(kubectl completion bash)
 ```
 
-For the mult-node cluster, you can instead opt to use the control plane node, which already has the tooling set up, by running `vagrant ssh k8s-controller` from inside the directory with the Vagrantfile.
+For the multi-node cluster, you can instead opt to use the control plane node, which already has the tooling set up, by running `vagrant ssh k8s-controller` from inside the directory with the Vagrantfile.
