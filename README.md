@@ -31,20 +31,32 @@ To get a local cluster up and running
 2. Install [Vagrant](https://www.vagrantup.com/downloads).
 3. From PowerShell, inside the `multi-node\hardway` directory, run `vagrant up`
 
-After a few minutes, you should return to the prompt and the cluster will be ready.
+After 5 - 10 minutes, you should return to the prompt and the cluster will be ready.
 
-If you ever decide to remove the cluster you can run `vagrant destroy --force` to delete the VMs. After that, if you even want to remove the downloaded boxes, etc., you also need to delete the .vagrant folder.
+If you ever decide to remove the cluster you can run `vagrant destroy --force` to delete the VMs.
 
 ### Alternative solution based on kubeadm with Ansible
 
-Notes on an alternative approach that did not succeed can be found here: [Ansible Notes](./ansible-notes.md)
+Notes on an alternative approach that did not succeed can be found here: [Ansible Notes](./docs/ansible-notes.md)
 
 ## Setting up tools
 
-If using Bash as your primary shell, you can have kubectl provide command completion by adding the following to `.bashrc`:
-
-```bash
-source <(kubectl completion bash)
-```
+### Vagrant Box
 
 For the multi-node cluster, you can instead opt to use the control plane node, which already has the tooling set up, by running `vagrant ssh k8s-controller` from inside the directory with the Vagrantfile.
+
+### PowerShell
+
+#### kubectl
+
+Depending on how you installed Kubernetes, you may already have kubectl installed. If not, you can choose one of the options in the instructions for "[Install kubectl on Windows](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-on-windows)".
+
+## Demo App Setup
+
+In order to interact with the cluster you need to set up kubectl to know about the cluster configuration. There are [several methods](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/), but this is a quick one:
+
+```powershell
+New-Item -Name $env:HOMEPATH/.kube -Type Directory -Force
+Copy-Item -Path .\tmp\admin.kubeconfig -Destination $env:HOMEPATH/.kube/config -Force
+kubectl cluster-info
+```

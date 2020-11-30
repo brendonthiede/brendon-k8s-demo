@@ -1,8 +1,6 @@
 # Ansible Notes
 
-## Warning
-
-This is not currently working!!!
+_This is not currently working!!!_
 
 There were a couple bugs with this solution that caused me to go with the previous strategy, but this may be the simpler approach once the kinks are worked out, especially for upgrading your Kubernetes version.
 

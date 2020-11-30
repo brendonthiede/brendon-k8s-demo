@@ -145,40 +145,11 @@ for _service_name in kube-apiserver kube-controller-manager kube-scheduler; do
 done
 
 write_info "Adding Kubernetes RBAC policies"
-cat <<EOF | kubectl apply --kubeconfig admin.kubeconfig -f -
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRole
-metadata:
-  annotations:
-    rbac.authorization.kubernetes.io/autoupdate: "true"
-  labels:
-    kubernetes.io/bootstrapping: rbac-defaults
-  name: system:kube-apiserver-to-kubelet
-rules:
-  - apiGroups:
-      - ""
-    resources:
-      - nodes/proxy
-      - nodes/stats
-      - nodes/log
-      - nodes/spec
-      - nodes/metrics
-    verbs:
-      - "*"
-EOF
+kubectl apply -f /etc/setup/controller/k8s-resources/rbac.yaml
 
-cat <<EOF | kubectl apply --kubeconfig admin.kubeconfig -f -
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRoleBinding
-metadata:
-  name: system:kube-apiserver
-  namespace: ""
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: system:kube-apiserver-to-kubelet
-subjects:
-  - apiGroup: rbac.authorization.k8s.io
-    kind: User
-    name: kubernetes
-EOF
+write_info "Installing calico CNI"
+kubectl apply -f https://docs.projectcalico.org/manifests/tigera-operator.yaml
+kubectl apply -f https://docs.projectcalico.org/manifests/custom-resources.yaml
+
+write_info "Installing CoreDNS"
+kubectl apply -f /etc/setup/controller/k8s-resources/core_dns.yaml
