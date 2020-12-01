@@ -1,8 +1,9 @@
 #!/bin/bash
 
 mkdir -p /etc/setup
-cp -R /vagrant/kubernetes-setup/* /etc/setup
-find /vagrant/kubernetes-setup -type f -name '*.sh' -exec bash -c "sed -i 's/\\r//g' {}; chmod +x {}" \;
+cp -R /vagrant/multi-node/hardway/kubernetes-setup/* /etc/setup
+cp -R /vagrant/app /etc/setup
+find /vagrant/multi-node/hardway/kubernetes-setup -type f -name '*.sh' -exec bash -c "sed -i 's/\\r//g' {}; chmod +x {}" \;
 
 /etc/setup/common/all.sh
 /etc/setup/controller/all.sh
