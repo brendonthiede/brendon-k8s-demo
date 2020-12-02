@@ -45,3 +45,23 @@ EOF
 
 cp /root/.ssh/config /home/vagrant/.ssh/config
 chown -R vagrant:vagrant /home/vagrant/.ssh/
+
+write_info "Setting up /etc/hosts"
+cat <<EOF >/etc/hosts
+127.0.0.1       localhost
+127.0.1.1       vagrant.vm      vagrant
+
+10.0.0.10       k8s-controller
+10.0.0.11       node-1
+10.0.0.12       node-2
+EOF
+
+write_info "Modifying sysctl.conf settings."
+sed -ri 's/^(net.bridge.bridge-nf-call-(ip6|ip|arp)tables)[ =].*/\1 = 1/g' /etc/sysctl.conf
+for _setting in vm.overcommit_memory=1 vm.panic_on_oom=0 kernel.panic=10 kernel.panic_on_oops=1; do
+    _key="${_setting%=*}"
+    _value="${_setting#*=}"
+    sed -i "/^${_key}[ ]*=/d" /etc/sysctl.conf
+    printf '\n%s' "${_setting}" >>/etc/sysctl.conf
+done
+service procps start

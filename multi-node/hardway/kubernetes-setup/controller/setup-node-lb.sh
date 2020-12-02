@@ -5,7 +5,7 @@ source "${SCRIPT_DIR}/../lib/_common.sh"
 
 write_info "Installing HAProxy"
 apt-get -qq update >/dev/null
-apt-get -qq install haproxy >/dev/null
+apt-get -qq -y install haproxy >/dev/null
 
 # Configure haproxy
 cat >/etc/default/haproxy <<EOF

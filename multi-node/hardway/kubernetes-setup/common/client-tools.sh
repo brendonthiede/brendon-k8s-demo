@@ -4,10 +4,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/../lib/_common.sh"
 
 apt-get -qq update >/dev/null
-write_info "Installing bash-completion"
-apt-get -qq install -y bash-completion >/dev/null
-write_info "Installing jq"
-apt-get -qq install jq >/dev/null
+write_info "Installing bash-completion and jq"
+apt-get -qq -y install bash-completion jq >/dev/null
 
 write_info "Installing cfssl"
 wget -O /usr/local/bin/cfssl -q https://github.com/cloudflare/cfssl/releases/download/v1.5.0/cfssl_1.5.0_linux_amd64

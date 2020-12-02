@@ -3,8 +3,15 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/../lib/_common.sh"
 
-apt-get update >/dev/null 2>&1
-apt-get -y install socat conntrack ipset >/dev/null 2>&1
+write_info "Enabling kernel modules to support overlay network."
+grep ^br_netfilter$ /etc/modules-load.d/modules.conf || echo br_netfilter >>/etc/modules-load.d/modules.conf
+grep ^overlay$ /etc/modules-load.d/modules.conf || echo overlay >>/etc/modules-load.d/modules.conf
+modprobe overlay
+modprobe br_netfilter
+
+write_info "Installing networking tools for worker."
+apt-get -qq update >/dev/null 2>&1
+apt-get -qq -y install socat conntrack ipset >/dev/null 2>&1
 
 grep -v '^#' /etc/fstab | grep swap && sed -i 's/\(.*swap\)/# \1/' /etc/fstab
 [[ $(swapon -s | tail -n1 | awk '{print $3}') -ne 0 ]] && swapoff -a
@@ -155,7 +162,7 @@ apiVersion: kubeproxy.config.k8s.io/v1alpha1
 clientConnection:
   kubeconfig: "/var/lib/kube-proxy/kubeconfig"
 mode: "iptables"
-clusterCIDR: "10.200.0.0/16"
+clusterCIDR: "10.244.0.0/16"
 EOF
 
 cat <<EOF >/etc/systemd/system/kube-proxy.service
@@ -165,7 +172,8 @@ Documentation=https://github.com/kubernetes/kubernetes
 
 [Service]
 ExecStart=/usr/local/bin/kube-proxy \\
-  --config=/var/lib/kube-proxy/kube-proxy-config.yaml
+  --config=/var/lib/kube-proxy/kube-proxy-config.yaml \\
+  --hostname-override=${INTERNAL_IP}
 Restart=on-failure
 RestartSec=5
 
@@ -176,3 +184,11 @@ EOF
 systemctl daemon-reload
 systemctl enable containerd kubelet kube-proxy
 systemctl start containerd kubelet kube-proxy
+
+write_info "Setting up admin kube config for convenience."
+mkdir -p /root/.kube
+sed 's/127\.0\.0\.1/10.0.0.10/' ${TMP_DIR}/admin.kubeconfig >/root/.kube/config
+
+mkdir -p /home/vagrant/.kube
+cp /root/.kube/config /home/vagrant/.kube/config
+chown -R vagrant:vagrant /home/vagrant/.kube

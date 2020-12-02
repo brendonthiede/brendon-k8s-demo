@@ -36,7 +36,7 @@ ExecStart=/usr/local/bin/kube-apiserver \\
   --etcd-cafile=/var/lib/kubernetes/ca.pem \\
   --etcd-certfile=/var/lib/kubernetes/kubernetes.pem \\
   --etcd-keyfile=/var/lib/kubernetes/kubernetes-key.pem \\
-  --etcd-servers=https://${KUBERNETES_PUBLIC_ADDRESS}:2379 \\
+  --etcd-servers=https://127.0.0.1:2379 \\
   --event-ttl=1h \\
   --encryption-provider-config=/var/lib/kubernetes/encryption-config.yaml \\
   --kubelet-certificate-authority=/var/lib/kubernetes/ca.pem \\
@@ -44,6 +44,7 @@ ExecStart=/usr/local/bin/kube-apiserver \\
   --kubelet-client-key=/var/lib/kubernetes/kubernetes-key.pem \\
   --kubelet-https=true \\
   --runtime-config='api/all=true' \\
+  --secure-port=6443 \\
   --service-account-key-file=/var/lib/kubernetes/service-account.pem \\
   --service-cluster-ip-range=10.32.0.0/24 \\
   --service-node-port-range=30000-32767 \\
@@ -66,8 +67,9 @@ Documentation=https://github.com/kubernetes/kubernetes
 
 [Service]
 ExecStart=/usr/local/bin/kube-controller-manager \\
+  --allocate-node-cidrs=true \\
   --bind-address=0.0.0.0 \\
-  --cluster-cidr=10.200.0.0/16 \\
+  --cluster-cidr=10.244.0.0/16 \\
   --cluster-name=kubernetes \\
   --cluster-signing-cert-file=/var/lib/kubernetes/ca.pem \\
   --cluster-signing-key-file=/var/lib/kubernetes/ca-key.pem \\
@@ -147,9 +149,15 @@ done
 write_info "Adding Kubernetes RBAC policies"
 kubectl apply -f /etc/setup/controller/k8s-resources/rbac.yaml
 
-write_info "Installing calico CNI"
-kubectl apply -f https://docs.projectcalico.org/manifests/tigera-operator.yaml
-kubectl apply -f https://docs.projectcalico.org/manifests/custom-resources.yaml
+write_info "Installing flannel CNI"
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
+# write_info "Installing calico CNI"
+# kubectl apply -f https://docs.projectcalico.org/manifests/tigera-operator.yaml
+# kubectl apply -f https://docs.projectcalico.org/manifests/custom-resources.yaml
 
 write_info "Installing CoreDNS"
 kubectl apply -f /etc/setup/controller/k8s-resources/core_dns.yaml
+
+write_info "Installing HAProxy Ingress Controller"
+kubectl apply -f https://raw.githubusercontent.com/haproxytech/kubernetes-ingress/master/deploy/haproxy-ingress.yaml
