@@ -1,4 +1,0 @@
----
-- include_tasks: cri.yml
-- include_tasks: no-swap.yml
-- include_tasks: install-k8s-binaries.yml

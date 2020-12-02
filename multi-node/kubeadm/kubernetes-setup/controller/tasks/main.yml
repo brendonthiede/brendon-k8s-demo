@@ -1,4 +1,0 @@
----
-- include_tasks: init-cluster.yml
-- include_tasks: cni.yml
-- include_tasks: generate-join-token.yml
