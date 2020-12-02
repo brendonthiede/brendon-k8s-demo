@@ -59,7 +59,7 @@ multipass exec k8s-controller -- sudo bash -c "cd /etc/setup/multipass/scripts/ 
 
 Write-Host "Pulling join-command and admin kube config from k8s-controller."
 multipass transfer k8s-controller:/etc/setup/tmp/join-command.sh $env:TEMP/join-command.sh
-New-Item -ItemType Directory -Force -Path $env:USERPROFILE/.kube
+New-Item -ItemType Directory -Force -Path $env:USERPROFILE/.kube | Out-Null
 multipass transfer k8s-controller:/home/ubuntu/.kube/config $env:USERPROFILE/.kube/config
 
 Write-Host "Joining workers to the cluster"
