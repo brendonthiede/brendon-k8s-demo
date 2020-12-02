@@ -1,7 +1,8 @@
 export DEBIAN_FRONTEND=noninteractive
 export SETUP_DIR="/etc/setup"
 export TMP_DIR="${SETUP_DIR}/tmp"
-export OS_VERSION=$(lsb_release -cs)
+export OS_ARCH="$(dpkg --print-architecture)"
+export OS_VERSION="$(lsb_release -cs)"
 export DOCKER_VERSION="5:19.03.14~3-0~ubuntu-${OS_VERSION}"
 export KUBERNETES_VERSION="v1.19.4"
 export HOSTNAME="$(hostname -s | sed 's/ //g')"
