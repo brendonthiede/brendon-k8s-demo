@@ -14,9 +14,10 @@ You will need to install [Multipass](https://multipass.run/) ([docs](https://mul
 
 If you want to use Kubernetes from your host OS, the following are recommended, though only kubectl is required:
 
+* Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) either by using Chocolatey or by downloading it and storing it as jq.exe somewhere in your path.
+* Install [helm](https://helm.sh/docs/intro/install/) using Chocolatey.
 * Install [jq](https://stedolan.github.io/jq/download/) either by using Chocolatey or by downloading it and storing it as jq.exe somewhere in your path.
 * Install [yq](https://github.com/mikefarah/yq) using Chocolatey.
-* Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) either by using Chocolatey or by downloading it and storing it as jq.exe somewhere in your path.
 
 You can also install command completion in PowerShell (not nearly as good as the Bash completion at this time, but still very useful) by running `Install-Module -Name PSKubectlCompletion` from an Administrator shell and then using `Import-Module PSKubectlCompletion` from the shell instance you will be using.
 
@@ -49,3 +50,9 @@ While minikube is great for basic Kubernetes functionality, if you want to be ab
 ```
 
 Depending on how your system is set up, you may need to relax execution policies. To disable them outright, you can just run `Set-ExecutionPolicy -ExecutionPolicy Unrestricted` to allow the unsigned script to run.
+
+## Troubleshooting
+
+### remote error: tls: bad record MAC
+
+If you end up with errors like "remote error: tls: bad record MAC" during image pull (and other activities) while using Multipass, it sounds like there may be some bugs with using WiFi with [Hyper-V](https://stackoverflow.com/a/56946337) and/or [WSL](https://github.com/microsoft/WSL/issues/4306). I resolved this by plugging in an wired connection.

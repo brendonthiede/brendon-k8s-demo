@@ -68,3 +68,6 @@ foreach ($vm in ("node-1", "node-2")) {
     multipass transfer $env:USERPROFILE/.kube/config $vm`:/tmp/admin.kubeconfig
     multipass exec $vm -- sudo bash -c "cd /etc/setup/multipass/scripts/ && common/all.sh && worker/all.sh"
 }
+
+Write-Host "Running post install steps on k8s-controller." -ForegroundColor Green
+multipass exec k8s-controller -- sudo bash -c "cd /etc/setup/multipass/scripts/ && post-install/all.sh"
