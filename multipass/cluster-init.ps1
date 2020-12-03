@@ -39,6 +39,10 @@ Get-ChildItem $env:TEMP\archive\setup -Recurse | `
     Where-Object { $_.PSIsContainer -and $_.Name -eq "tmp" } | `
     ForEach-Object { Remove-Item -Path $_.FullName -Recurse -Force }
 
+Get-ChildItem $env:TEMP\archive\setup -Recurse | `
+    Where-Object { $_.PSIsContainer -and $_.Name -eq "node_modules" } | `
+    ForEach-Object { Remove-Item -Path $_.FullName -Recurse -Force }
+
 Write-Host "Copying cluster list and SSH keys for transfer to the cluster VMs." -ForegroundColor Green
 multipass list --format json | jq '[.list[] | select(.name | test(\"k8s-controller|node-[12]\"))]' | Set-Content -Path $env:TEMP\archive\setup\vm-list.json -Force
 multipass transfer k8s-controller:/home/ubuntu/.ssh/id_rsa $env:TEMP\archive\setup\id_rsa

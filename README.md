@@ -41,6 +41,10 @@ $mpIP = (multipass list --format json | jq -r '.list[] | select(.name == \"k3s\"
 ((multipass exec k3s -- sudo cat /etc/rancher/k3s/k3s.yaml) -replace '127.0.0.1',$mpIP) |  Set-Content -Path $env:USERPROFILE\.kube\config
 ```
 
+### Credit
+
+Credit to [Jason Yee](https://jyeee.medium.com/?source=post_page-----14c31af12b7a--------------------------------) for his article [Rancher 2.4 & Kubernetes on your Windows 10 laptop with multipass & k3s — Elasticsearch/Kibana in minutes!](https://jyeee.medium.com/rancher-2-4-14c31af12b7a), which inspired this solution.
+
 ## kubeadm multi-node cluster
 
 While minikube is great for basic Kubernetes functionality, if you want to be able to see how HA, anti-affinity, affinity, taints, tolerations, etc. work in a more realistic scenario, you need to have more than one worker. This cluster will give you a three node cluster, composed of one control plane node and two worker nodes. You should be able to launch the VMs and get them setup by running:
@@ -50,6 +54,10 @@ While minikube is great for basic Kubernetes functionality, if you want to be ab
 ```
 
 Depending on how your system is set up, you may need to relax execution policies. To disable them outright, you can just run `Set-ExecutionPolicy -ExecutionPolicy Unrestricted` to allow the unsigned script to run.
+
+### Credit
+
+Credit to [Kanchana Wickremasinghe](https://medium.com/@kanchana.w?source=post_page-----f80b92b1c6a7--------------------------------) for his article [Kubernetes Multi-Node Cluster with Multipass on Ubuntu 18.04 Desktop](https://medium.com/platformer-blog/kubernetes-multi-node-cluster-with-multipass-on-ubuntu-18-04-desktop-f80b92b1c6a7) which was the base I created this off of.
 
 ## Troubleshooting
 
