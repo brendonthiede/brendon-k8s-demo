@@ -37,8 +37,17 @@ k3s is a new option from Rancher that runs as a single binary, with _most_ of th
 ```powershell
 multipass launch --name k3s --cpus 4 --mem 4g --disk 20g
 multipass exec k3s -- bash -c 'curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644" sh -'
+multipass exec k3s -- sudo bash -c 'apt-get update && su apt-get install jq -y'
+multipass exec k3s -- sudo bash -c 'wget -O /usr/local/bin/yq -q https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64 && chmod +x /usr/local/bin/yq'
+multipass exec k3s -- sudo bash -c 'wget -O /tmp/helm.tgz https://get.helm.sh/helm-v3.4.2-linux-amd64.tar.gz && cd /tmp && tar -zxf helm.tgz && mv linux-amd64/helm /usr/local/bin/'
 $mpIP = (multipass list --format json | jq -r '.list[] | select(.name == \"k3s\") | .ipv4[0]')
 ((multipass exec k3s -- sudo cat /etc/rancher/k3s/k3s.yaml) -replace '127.0.0.1',$mpIP) |  Set-Content -Path $env:USERPROFILE\.kube\config
+```
+
+If all pods are stuck pending and have an event with a message like "0/1 nodes are available: 1 node(s) had taint {node.cloudprovider.kubernetes.io/uninitialized: true}, that the pod didn't tolerate." you can remove the taint manually with the following:
+
+```powershell
+kubectl taint nodes k3s node.cloudprovider.kubernetes.io/uninitialized-
 ```
 
 ### Credit
