@@ -74,11 +74,11 @@ func main() {
 	e.Use(middleware.CORS())
 
 	// Routes
-	e.GET("/users", getAllUsers)
-	e.POST("/users", createUser)
-	e.GET("/users/:id", getUser)
-	e.PUT("/users/:id", updateUser)
-	e.DELETE("/users/:id", deleteUser)
+	e.GET("/api/users", getAllUsers)
+	e.POST("/api/users", createUser)
+	e.GET("/api/users/:id", getUser)
+	e.PUT("/api/users/:id", updateUser)
+	e.DELETE("/api/users/:id", deleteUser)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8887"))

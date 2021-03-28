@@ -1,3 +1,3 @@
 {
-    "usersUrl": "http://localhost:8887/users"
+    "usersUrl": "http://localhost:8887/api/users"
 }
