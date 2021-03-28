@@ -31,11 +31,11 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ### Build Docker image
 
 ```powershell
-docker build . -t thiedebr/playground:crud-ui
+docker build . -t thiedebr/crud-ui:latest
 ```
 
 ### Publish image to DockerHub
 
 ```powershell
-docker push thiedebr/playground:crud-ui
+docker push thiedebr/crud-ui:latest
 ```

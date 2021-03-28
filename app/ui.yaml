@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: thiedebr/playground:crud-ui
+          image: thiedebr/crud-ui:latest
           resources:
             limits:
               cpu: 100m
