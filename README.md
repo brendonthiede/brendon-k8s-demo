@@ -6,7 +6,7 @@ This repo exists for showing some example installation and usage of [Kubernetes]
 
 ## Context
 
-The reference system for this is using Windows 10 Pro version 1909, build 18363.1139. The has [Docker Desktop 2.5](https://hub.docker.com/editions/community/docker-ce-desktop-windows) (which leverages Hyper-V) and [Virtual Box 6.1](https://www.virtualbox.org/wiki/Downloads) (which can work with Hyper-V). You should not need WSL in order to use the examples below, and you should only need either Virtual Box _or_ Hyper-V in order to work with Multipass.
+The reference system for this is using Windows 10 Pro version 1909, build 18363.1139. It has [Docker Desktop 2.5](https://hub.docker.com/editions/community/docker-ce-desktop-windows) (which leverages Hyper-V) and [Virtual Box 6.1](https://www.virtualbox.org/wiki/Downloads) (which can work with Hyper-V). You should not need WSL in order to use the examples below, and you should only need either Virtual Box _or_ Hyper-V in order to work with Multipass.
 
 ## Client tools
 
@@ -14,7 +14,7 @@ You will need to install [Multipass](https://multipass.run/) ([docs](https://mul
 
 If you want to use Kubernetes from your host OS, the following are recommended, though only kubectl is required:
 
-* Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) either by using Chocolatey or by downloading it and storing it as jq.exe somewhere in your path.
+* Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) either by using Chocolatey or by downloading it and storing it as kubectl.exe somewhere in your path.
 * Install [helm](https://helm.sh/docs/intro/install/) using Chocolatey.
 * Install [jq](https://stedolan.github.io/jq/download/) either by using Chocolatey or by downloading it and storing it as jq.exe somewhere in your path.
 * Install [yq](https://github.com/mikefarah/yq) using Chocolatey.
