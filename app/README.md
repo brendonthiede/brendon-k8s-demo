@@ -8,7 +8,7 @@ To run the sample apps locally, you can use docker-compose:
 docker-compose up --build
 ```
 
-The UI for the app will be available http://localhost
+The UI for the app will be available http://localhost:8888
 
 ## Deploying to Kubernetes
 
