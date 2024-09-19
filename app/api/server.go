@@ -24,6 +24,10 @@ var (
 // Handlers
 //----------
 
+func health(c echo.Context) error {
+	return c.String(http.StatusOK, "OK")
+}
+
 func createUser(c echo.Context) error {
 	u := &user{
 		ID: seq,
@@ -59,9 +63,9 @@ func deleteUser(c echo.Context) error {
 
 func getAllUsers(c echo.Context) error {
 	values := []*user{}
-    for _, value := range users {
-        values = append(values, value)
-    }
+	for _, value := range users {
+		values = append(values, value)
+	}
 	return c.JSONPretty(http.StatusOK, values, "  ")
 }
 
@@ -74,6 +78,7 @@ func main() {
 	e.Use(middleware.CORS())
 
 	// Routes
+	e.GET("/health", health)
 	e.GET("/api/users", getAllUsers)
 	e.POST("/api/users", createUser)
 	e.GET("/api/users/:id", getUser)
