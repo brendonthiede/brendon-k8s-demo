@@ -1,4 +1,4 @@
-FROM golang:alpine as builder
+FROM golang:alpine AS builder
 
 RUN mkdir /app
 COPY . /app
@@ -12,3 +12,5 @@ RUN ls -la 1>&2
 FROM scratch
 COPY  --from=builder /app/server /server
 CMD ["/server"]
+
+EXPOSE 8887
